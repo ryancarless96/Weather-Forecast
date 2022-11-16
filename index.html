@@ -17,9 +17,9 @@
     <form id="search-form" class="form w-100"> Search for a city:
       <input id="search-input" class="form-input w-100" type="text" placeholder="">
       <select id="format-input" class="form-input w-100">
-        <option value="" disabled selected>Search </option>
-        <option value="atlanta"> Atlanta</option>
-          <option value="denver">Denver</option>
+        <select id ="disabled selected" >Search </select>
+        <option value="atlanta"> Atlanta</button>
+          <option value="denver">Denver</button>
           <option value="seattle">Seattle</option>
           <option value="sanfrancisco"> San Francisco</option>
           <option value="orlando">Orlando</option>
@@ -28,10 +28,12 @@
           <option value="austin">Austin</option>
         </select>
         <button class="btn btn-info btn-block">Click Me</button>
-      </form>
+        <div class="col-12 col-md-9 p-3 text-light">
+      <h2>5-Day Forecast: <span id="result-text"></span></h2>
+      <div id="result-content"></div>
     </div>
   </div>
-
+      </form>
   <script src="./assets/js/script.js"></script>
 </body>
   </html>
