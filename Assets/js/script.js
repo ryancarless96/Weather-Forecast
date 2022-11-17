@@ -2,6 +2,10 @@ var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
 var searchFormEl = document.querySelector('#search-form');
 
+var APIKey = "86abf9206ebd8e4acd85fa659421b764"
+
+
+
 function getParams() {
   var searchParamsArr = document.location.search.split('&');
 
@@ -51,34 +55,34 @@ function printResults(resultObj) {
   resultAnswersEl.append(resultWork);
 }
 function searchApi(query, format) {
-  var locQueryUrl = 'https://openweathermap.org/forecast5';
-  if(format) {
-    locQueryUrl = 'https://www.openweathermap.org/' + format + '/?fo=json';
+  var locQueryUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=86abf9206ebd8e4acd85fa659421b764';
+  if (format) {
+    locQueryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
   }
   locQueryUrl = locQueryUrl + '&q=' + query;
 
   fetch(locQueryUrl)
-  .then(function(response) {
-    if(!response.ok) {
-      throw response.json();
-    }
-    return response.json();
-  })
-  .then(function(locRes){
-    resultTextEl.textContent = locRes.search.query;
-    console.log(locRes);
-
-    if(!locRes.results.length) {
-      console.log('No results found!');
-      resultAnswersEl.textContent = '';
-      for(var i=0; i < locRes.results.length; i++) {
-        printResults(locRes.results[i]);
+    .then(function (response) {
+      if (!response.ok) {
+        throw response.json();
       }
-    }
-  })
-  .catch(function(error){
-    console.error(error);
-  });
+      return response.json();
+    })
+    .then(function (locRes) {
+      resultTextEl.textContent = locRes.search.query;
+      console.log(locRes);
+
+      if (!locRes.results.length) {
+        console.log('No results found!');
+        resultAnswersEl.textContent = '';
+        for (var i = 0; i < locRes.results.length; i++) {
+          printResults(locRes.results[i]);
+        }
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 function handleSearchFormSubmit(event) {
   event.preventDefault();
