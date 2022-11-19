@@ -7,7 +7,10 @@
   <title>Weather Forecast </title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400&family=Merriweather:wght@700&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="./Assets/css/style.css" />
 </head>
 
 <body>
@@ -16,25 +19,31 @@
       <h1 class="text-primary"> Weather Forecast Search Engine </h1>
       <form id="search-form" class="form w-100"> Search for a city:
         <input id="search-input" class="form-input w-100" type="text" placeholder="">
-        <select id="format-input" class="form-input w-100">
-          <select id="disabled selected">Search </select>
-          <option value="atlanta"> Atlanta</button>
-          <option value="denver">Denver</button>
-          <option value="seattle">Seattle</option>
-          <option value="sanfrancisco"> San Francisco</option>
-          <option value="orlando">Orlando</option>
-          <option value="newyork">New York</option>
-          <option value="chicago">Chicago</option>
-          <option value="austin">Austin</option>
-        </select>
+        <button id="disabled selected">Search </button>       
         <div class="col-12 col-md-9 p-3 text-light">
-          <h2>5-Day Forecast: <span id="result-text"></span></h2>
-          <div id="result-content"></div>
         </div>
     </div>
     </form>
-    <script src="./assets/js/script.js"></script>
+    <div class="col-12 col-md-9 p-3 text-light">
+      <h2>5-Day Forecast: <span id="result-text"></span></h2>
+      <div id="result-content"></div>
+    <div id="daily-forecast">
+      <p>Temperature </p>
+        <p>Humidity </p>
+        <p>Wind Speed</p>
+        <p>UV Index</p>
+      </div> 
+    <script src="./Assets/js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
+
 </body>
 
 </html>
-

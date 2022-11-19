@@ -1,20 +1,10 @@
 var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
 var searchFormEl = document.querySelector('#search-form');
+var dailyForecast = document.getElementById("dailyForecast");
 
-var APIKey = "86abf9206ebd8e4acd85fa659421b764"
+var APIKey = "86abf9206ebd8e4acd85fa659421b764";
 
-
-
-function getParams() {
-  var searchParamsArr = document.location.search.split('&');
-
-  var query = searchParamsArr[0].split('=').pop();
-  var format = searchParamsArr[1].split('=').pop();
-
-  searchApi(query, format);
-
-}
 function printResults(resultObj) {
   console.log(resultObj);
 
@@ -57,7 +47,7 @@ function printResults(resultObj) {
 function searchApi(query, format) {
   var locQueryUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=86abf9206ebd8e4acd85fa659421b764';
   if (format) {
-    locQueryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
+    locQueryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
   }
   locQueryUrl = locQueryUrl + '&q=' + query;
 
@@ -88,18 +78,12 @@ function handleSearchFormSubmit(event) {
   event.preventDefault();
 
   var searchInputVal = document.querySelector('#search-input').value;
-  var formatInputVal = document.querySelector('#format-input').value;
   if (!searchInputVal) {
     console.error('You need a search input value!');
     return;
   }
-
-  var queryString = './search-results.html?q=' + searchInputVal + '&format=' + formatInputVal;
-
-  location.assign(queryString);
 }
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
 
-getParams();
 
