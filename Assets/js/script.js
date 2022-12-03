@@ -2,18 +2,19 @@ var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
 var searchFormEl = document.querySelector('#search-form');
 var dailyForecast = document.getElementById("dailyForecast");
-
-var searchInputVal=document.getElementById("search-input-val");
-
+var searchInputVal = document.getElementById("search-input-val");
 var APIKey = "86abf9206ebd8e4acd85fa659421b764";
+var city
 
 
-function printResults(resultObj) {
+function searchforQuery(resultObj) {
   console.log(resultObj);
-  
+  var query = searchInputVal[0].split('=').pop();
+  searchFormEl(query);
 
   var resultWork = document.createElement('div');
   resultWork.classList.add('work', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+
 
   var resultBody = document.createElement('div');
   resultBody.classList.add('card-body');
@@ -48,16 +49,21 @@ function printResults(resultObj) {
   resultBody.append(titleEl, bodyContentEl, linkButtonEl);
   resultAnswersEl.append(resultWork);
 }
-function searchApi() {
-  var locQueryUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=86abf9206ebd8e4acd85fa659421b764';
-  if (function(search) {
-    locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
-  } )
-  locQueryUrl = locQueryUrl + '&q=' + query;
 
-  fetch('https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=86abf9206ebd8e4acd85fa659421b764',)
+function searchApi() {
+  var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`;
+  if (function (search) {
+    locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
+  })
+
+  locQueryUrl = locQueryUrl + '&q=' + query;
+  //http://api.openweathermap.org/geo/1.0/direct?q=piscataway,NJ,US&limit=1&appid=86abf9206ebd8e4acd85fa659421b764
+
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`,)
     .then(function (response) {
-      if (response) {
+      if (response.ok) {
+        console.log(response);
+        response.json().then
         throw response.json();
       }
       return response.json();
@@ -73,7 +79,15 @@ function searchApi() {
           printResults(locRes.results[i]);
         }
       }
-      
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`,)
+    .then(function(response){
+      if(response) {
+        throw response.json();
+      }
+      return response.json();
+    })
+    
+
     })
     .catch(function (error) {
       console.error(error);
