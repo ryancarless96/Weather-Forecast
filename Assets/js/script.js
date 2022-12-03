@@ -1,13 +1,20 @@
+var searchHistory =[];
+var weatherURL ='https://api.openweathermap.org/';
+var APIKey = "86abf9206ebd8e4acd85fa659421b764";
+
+var searchFormEl = document.querySelector('#search-form');
+var searchInputVal = document.getElementById("search-input-val");
 var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
-var searchFormEl = document.querySelector('#search-form');
 var dailyForecast = document.getElementById("dailyForecast");
-var searchInputVal = document.getElementById("search-input-val");
-var APIKey = "86abf9206ebd8e4acd85fa659421b764";
-var city
+
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
 
 
-function searchforQuery(resultObj) {
+function searchforQuery() {
+  searchHistoryContainer.innerHTML='';
+  
   console.log(resultObj);
   var query = searchInputVal[0].split('=').pop();
   searchFormEl(query);
@@ -51,6 +58,9 @@ function searchforQuery(resultObj) {
 }
 
 function searchApi() {
+  var{lat}=location;
+  var{lon}=location;
+  var city=location.name;
   var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`;
   if (function (search) {
     locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
