@@ -1,5 +1,17 @@
+html {
+  line-height: 1.15;
+
+  -webkit-text-size-adjust: 100%;
+
+}
+
 body {
   font-family: 'Fira Sans', sans-serif;
+  margin: 0;
+}
+
+main {
+  display: block;
 }
 
 h1,
@@ -10,10 +22,6 @@ h5,
 h6 {
   font-family: 'Merriweather', serif;
   font-weight: 700;
-}
-
-body {
-  margin: 0;
 }
 
 head {
