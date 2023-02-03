@@ -1,68 +1,50 @@
+var searchHistory =[];
 var locQueryUrl = 'https://api.openweathermap.org/';
 var APIKey = "86abf9206ebd8e4acd85fa659421b764";
 var query
-var searchHistory =[];
-
-
 
 var searchFormEl = document.querySelector('#search-form');
 var searchInputVal = document.getElementById("search-input-val");
 var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
 var dailyForecast = document.getElementById("dailyForecast");
+var searchingContainter = document.querySelector('#history');
 
 dayjs.extend(window.dayjs_plugin_utc);
 dayjs.extend(window.dayjs_plugin_timezone);
 
-function searchforQuery(){
-  console.log(resultObj);
-  var query = searchInputVal[0].split('=').pop();
-  searchFormEl(query);
- 
-  var resultWork = document.createElement('div');
-  resultWork.classList.add('work', 'bg-light', 'text-dark', 'mb-3', 'p-3');
- 
- 
-  var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
-  resultWork.append(resultBody);
- 
-  var titleEl = document.createElement('h3');
-  titleEl.textContent = resultObj.title;
- 
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
-    '<strong>Subjects:</strong>' + resultObj.date + '<br/>';
- 
-  if (resultObj.subject) {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong>' + resultObj.subject.join(',') + '<br/>';
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong> Description: </strong>' + resultObj.description[0];
+function renderSearchHistory(){
+  searchingContainter.innerHTML = '';
+
+  for(var i = searchHistory.length -1; i >= 0; i--) {
+    var btn = document.createElement('button');
+    btn.setAttribute('type','button');
+    btn.setAttribute('aria-controls', 'weather forecast');
+    btn.setAttribute('history-btn', 'btn-history');
+
+    btn.setAttribute('data-search', searchHistory[i]);
+    btn.textContent = searchHistory[i];
+    searchingContainter.append(btn);
   }
-  if (resultObj.description) {
-    bodyContentEl.innerHTML +=
-      '<strong> Description: </strong>' + resultObj.description[0];
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong> Description: </strong> No description for this entry.';
-  }
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.url)
-  linkButtonEl.classList.add('btn', 'btn-dark');
- 
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
-  resultAnswersEl.append(resultWork);
 }
  
-function fetchCoords(search) {
+function appendToHistory(search) {
+var History = localStorage.getItem('search-history');
+if(History) {
+  searchHistory = JSON.parse(History);
+}
+renderSearchHistory();
+}
+
+function renderNewWeather(city,weather) {
+  var temperature = weather.main.temp;
+  var windPower = weather.wind.speed;
+  var humidity = weather.main.humidity;
   var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid==86abf9206ebd8e4acd85fa659421b764`;
   if (function (search) {
     locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
   })
- 
+
     locQueryUrl = locQueryUrl + '&q=' + query;
   //http://api.openweathermap.org/geo/1.0/direct?q=piscataway,NJ,US&limit=1&appid=86abf9206ebd8e4acd85fa659421b764
  
