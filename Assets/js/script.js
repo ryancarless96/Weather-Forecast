@@ -29,18 +29,26 @@ function renderSearchHistory(){
 }
  
 function appendToHistory(search) {
-var History = localStorage.getItem('search-history');
-if(History) {
-  searchHistory = JSON.parse(History);
+if (searchHistory.indexOf(search) === -1) {
+  return;
 }
-renderSearchHistory();
+searchHistory.push(search);
+  localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  renderSearchHistory();
+
 }
 
 function renderNewWeather(city,weather) {
+  var currentDate = dayjs().format('M/D/YYYY')
   var temperature = weather.main.temp;
   var windPower = weather.wind.speed;
   var humidity = weather.main.humidity;
   var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid==86abf9206ebd8e4acd85fa659421b764`;
+  var iconDesc = weather.weather[0].description || weather[0].main;
+  
+  var card = document.createElement('div');
+  var cardBody = document.createElement('div');
+  
   if (function (search) {
     locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
   })
