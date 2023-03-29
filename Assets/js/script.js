@@ -4,10 +4,10 @@ var APIKey = "86abf9206ebd8e4acd85fa659421b764";
 var query
 
 var searchFormEl = document.querySelector('#search-form');
-var searchInputVal = document.getElementById("search-input-val");
+var searchInputVal = document.getElementById("#search-input-val");
 var resultTextEl = document.querySelector('#result-text');
 var resultAnswersEl = document.querySelector('#result-answer');
-var dailyForecast = document.getElementById("dailyForecast");
+var dailyForecast = document.getElementById("#dailyForecast");
 var searchingContainter = document.querySelector('#history');
 
 dayjs.extend(window.dayjs_plugin_utc);
@@ -36,6 +36,14 @@ function appendToHistory(search) {
   localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
   renderSearchHistory();
 
+}
+
+function initSearchHistory() {
+  var storedHistory = localStorage.getItem('searchHistory');
+  if(storedHistory) {
+    searchHistory = JSON.parse(storedHistory);
+  }
+  renderSearchHistory();
 }
 
 function renderNewWeather(city, weather) {
@@ -115,76 +123,47 @@ function fetchWeather(location) {
     .then(function (response) {
       return res.json();
     })
-    .then(function(data){
-      renderItems(city,data);
+    .then(function (data) {
+      renderItems(city, data);
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err);
     });
-function fetchCoords(search) {
-  var apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=86abf9206ebd8e4acd85fa659421b764`;
+  function fetchCoords(search) {
+    var apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=86abf9206ebd8e4acd85fa659421b764`;
 
 
-  fetch(apiUrl)
-    .then(function (response) {
-      return res.json();
-})
-    .then(function(data){
-      if(!data[0]) {
-        alert('No results found');
-      } else {
-        appendToHistory(search);
-        fetchWeather(data[0]);
-      }
-    })
-      .catch(function(err) {
+    fetch(apiUrl)
+      .then(function (response) {
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data[0]) {
+          alert('No results found');
+        } else {
+          appendToHistory(search);
+          fetchWeather(data[0]);
+        }
+      })
+      .catch(function (err) {
         console.error(err);
       });
-}
-    
-
-
-
-  // if (function (search) {
-  //   locQueryUrl = "https://api.openweathermap.org/" + searchInputVal + "&appid=" + '86abf9206ebd8e4acd85fa659421b764';
-  // })
-
-  //   locQueryUrl = locQueryUrl + '&q=' + query;
-  // //http://api.openweathermap.org/geo/1.0/direct?q=piscataway,NJ,US&limit=1&appid=86abf9206ebd8e4acd85fa659421b764
-
-  // fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`,)
-  //   .then(function (response) {
-  //     if (response.ok) {
-  //       console.log(response);
-  //       return response.json();
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(function (data) {
-  //     console.log(data);
-
-  //     if (!city.results.length) {
-  //       console.log('No results found!');
-  //       resultAnswersEl.textContent = '';
-  //       for (var i = 0; i < city.results.length; i++) {
-  //         printResults(city.results[i]);
-  //       }
-  //     }
-  //     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`,)
-  //       .then(response => response.json())
-  //       .then(response => console.log(response))
-  //       .catch(err => console.error(err));
-  //   })
-};
-function handleSearchFormSubmit(event) {
-  event.preventDefault();
-
-  var searchInputVal = document.querySelector('#search-input').value;
-  if (!searchInputVal) {
-    console.error('You need a search input value!');
-    return;
   }
-  fetchCoords(searchInputVal);
+
+  function handleSearchFormSubmit(event) {
+    if (!searchInputVal.value) {
+      return;
+    }
+    event.preventDefault();
+    var search = searchInputVal.trim();
+    fetchCoords(search);
+    searchInputVal.value = '';
+  }
+
+  var btn = e.target;
+  var search = btn.getAttribute('data-search');
+  fetchCoords(search);
+
 }
 initSearchHistory();
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
