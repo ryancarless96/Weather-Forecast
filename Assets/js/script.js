@@ -40,7 +40,7 @@ function appendToHistory(search) {
 
 function initSearchHistory() {
   var storedHistory = localStorage.getItem('searchHistory');
-  if(storedHistory) {
+  if (storedHistory) {
     searchHistory = JSON.parse(storedHistory);
   }
   renderSearchHistory();
@@ -48,7 +48,7 @@ function initSearchHistory() {
 
 function renderNewWeather(city, weather) {
   var currentDate = dayjs().format('M/D/YYYY')
-  var temperature = weather.main.temp;
+  var temperatureEl = weather.main.temp;
   var windPower = weather.wind.speed;
   var humidity = weather.main.humidity;
   var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid==86abf9206ebd8e4acd85fa659421b764`;
@@ -73,17 +73,61 @@ function renderNewWeather(city, weather) {
   humidityEl.setAttribute('class', 'card-text');
 
   heading.textContent = city.name + ' (' + currentDate + ')';
-  weatherImg.setAttribute('src', 'https://openweathermap.org/img/w/' + weather.weather[0].icon + '.png');
+  weatherImg.setAttribute('src', locQueryUrl);
   weatherImg.setAttribute('alt', iconDesc);
   heading.append(weatherImg);
-  temperatureEl.textContent = 'Temperature: ' + temperature + ' °F';
-  windEl.textContent = 'Wind Speed: ' + windPower + ' MPH';
-  humidityEl.textContent = 'Humidity: ' + humidity + '%';
+  temperatureEl.textContent = `TemperatureEl: ${temperatureEl}°F`;
+  windEl.textContent = `wind: ${windPower} MPH`;
+  humidityEl.textContent = `Humidity:${humidity} '%`;
 
   forecastContainer.append(card);
 }
 
-function renderForecast(city, weather) {
+function renderForecastCard(dailyForecast) {
+  var locQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`;
+  var iconDesc = dailyForecast.weather[0].description || dailyForecast[0].main;
+  var temperatureEl = dailyForecast.main.temp;
+  var windPower = dailyForecast.wind.speed;
+
+  var col = document.createElement('div');
+  var card = document.createElement('div');
+  var cardBody = document.createElement('div');
+  var cardTitle = document.createElement('h3');
+  var weatherImg = document.createElement('img');
+  var temperatureEl = document.createElement('p');
+  var windEl = document.createElement('p');
+  var humidityEl = document.createElement('p');
+
+
+  col.append(card);
+  card.append(cardBody);
+  cardBody.append(cardTitle, weatherImg, temperatureEl, windEl, humidityEl);
+
+
+  col.setAttribute('class', 'col');
+  col.classList.add('col-2');
+  card.setAttribute('class', 'card');
+  cardBody.setAttribute('class', 'card-body');
+  cardTitle.setAttribute('class', 'card-title');
+  temperatureEl.setAttribute('class', 'card-text');
+  windEl.setAttribute('class', 'card-text');
+  humidityEl.setAttribute('class', 'card-text');
+
+
+  cardTitle.textContent = dayjs(dailyForecast.dt_txt).format('M/D/YYYY');
+  weatherImg.setAttribute('src', locQueryUrl);
+  weatherImg.setAttribute('alt', iconDesc);
+  temperatureEl.textContent = `TemperatureEl: ${temperatureEl}°F`;
+  windEl.textContent = `wind: ${windPower} MPH`;
+  humidityEl.textContent = `Humidity:${humidityEl} '%`;
+
+
+  forecastContainer.append(col);
+}
+
+
+
+function renderForecast(dailyForecast) {
   var startDate = dayjs().add(1, 'day').format('M/D/YYYY');
   var endDate = dayjs().add(5, 'day').format('M/D/YYYY');
 
@@ -120,7 +164,7 @@ function fetchWeather(location) {
   var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=86abf9206ebd8e4acd85fa659421b764`;
 
   fetch(apiUrl)
-    .then(function (response) {
+    .then(function () {
       return res.json();
     })
     .then(function (data) {
@@ -129,40 +173,7 @@ function fetchWeather(location) {
     .catch(function (err) {
       console.error(err);
     });
-  function fetchCoords(search) {
-    var apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=1&appid=86abf9206ebd8e4acd85fa659421b764`;
 
-
-    fetch(apiUrl)
-      .then(function (response) {
-        return res.json();
-      })
-      .then(function (data) {
-        if (!data[0]) {
-          alert('No results found');
-        } else {
-          appendToHistory(search);
-          fetchWeather(data[0]);
-        }
-      })
-      .catch(function (err) {
-        console.error(err);
-      });
-  }
-
-  function handleSearchFormSubmit(event) {
-    if (!searchInputVal.value) {
-      return;
-    }
-    event.preventDefault();
-    var search = searchInputVal.trim();
-    fetchCoords(search);
-    searchInputVal.value = '';
-  }
-
-  var btn = e.target;
-  var search = btn.getAttribute('data-search');
-  fetchCoords(search);
 
 }
 initSearchHistory();
