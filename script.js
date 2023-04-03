@@ -79,7 +79,9 @@ function renderNewWeather(city, weather) {
   temperatureEl.textContent = `TemperatureEl: ${temperatureEl}°F`;
   windEl.textContent = `wind: ${windPower} MPH`;
   humidityEl.textContent = `Humidity:${humidity} '%`;
+  cardBody.append(heading,temperatureEl, windEl, humidityEl);
 
+  forecastContainer.innerHTML='';
   forecastContainer.append(card);
 }
 
@@ -175,6 +177,47 @@ function fetchWeather(location) {
     });
 
 
+}
+
+
+function fetchCoords(search) {
+  var apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=86abf9206ebd8e4acd85fa659421b764`;
+
+  fetch(apiUrl)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      if(!data[0]) {
+        alert('No results found. Please try again.');
+      } else {
+        appendToHistory(search);
+        fetchWeather(data[0]);
+}
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+
+}
+function handleSearchFormSubmit(event) {
+ if(!searchInputVal.value) {
+  return;
+ }
+ event.preventDefault();
+var search = searchInputVal.value.trim();
+fetchCoords(search);
+searchInputVal.value = '';
+}
+
+function handleSearchHistoryClick(event) {
+  if(!event.target.matches('.btn-history')) {
+    return;
+  }
+
+  var btn = event.target;
+  var search = btn.getAttribute('data-search');
+  fetchCoords(search);
 }
 initSearchHistory();
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
